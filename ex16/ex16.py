@@ -7,14 +7,10 @@ lista_palabras = []
 for linea in palabras:
     linea = linea.strip()
     lista_palabras.append(linea)
-
-complejidad: int = 0
-minchar: int = 0
-maxchar: int = 0
-contrasena: str 
+ 
 caracteres_especiales = ["!", "$", "#", "@", "[", "]", "+", "-", ",", "."]
 
-def seleccionar_complejidad() -> int :
+def seleccionar_complejidad() :
     x = input("Por favor ingresá un número del 1 al 5: ")
     if x.isnumeric():
         x = int(x)
@@ -23,7 +19,7 @@ def seleccionar_complejidad() -> int :
     print("Por favor ingresá un número válido.")
     return seleccionar_complejidad()
 
-def seleccionar_numchar(frase: str) -> int :
+def seleccionar_numchar(frase) :
     x = input(frase)
     if x.isnumeric():
         return int(x)
@@ -34,11 +30,12 @@ def seleccionar_numchar(frase: str) -> int :
 def definir_largo():
     largo = minchar + randint(0, maxchar - minchar)
     return largo
+
 def seleccionar_palabra():
     x = choice(lista_palabras)
     return x
 
-def randomizar_mayusculas(frase: str) :
+def randomizar_mayusculas(frase) :
     frase_modificada = []
     for ch in frase:
             if ch.isalpha():
@@ -49,7 +46,7 @@ def randomizar_mayusculas(frase: str) :
                     frase_modificada.append(ch)
     return "".join(frase_modificada)
 
-def secuenciar_palabras(con_simbolos: bool, con_mayusc: bool):
+def secuenciar_palabras(con_simbolos, con_mayusc):
     contrasena = ""
     while len(contrasena) < minchar:
         elegir_palabra = True
@@ -65,7 +62,7 @@ def secuenciar_palabras(con_simbolos: bool, con_mayusc: bool):
         contrasena = randomizar_mayusculas(contrasena)
     return contrasena
 
-def secuenciar_caracteres(con_simbolos: bool) :
+def secuenciar_caracteres(con_simbolos) :
     contrasena = ""
     caracteres = string.ascii_letters
     if con_simbolos:
@@ -76,6 +73,7 @@ def secuenciar_caracteres(con_simbolos: bool) :
     return contrasena
 
 def generar_contrasena(complejidad):
+    nueva_contrasena = ""
     match complejidad :
         case 1 :
             nueva_contrasena= secuenciar_palabras(con_simbolos=False, con_mayusc=False)
@@ -108,10 +106,9 @@ if __name__ == "__main__" :
     print(f"Tu contraseña es: {contrasena}")
     sleep(1)
     guardar = input("Querés guardar la contraseña en un archivo de texto en esta misma carpeta? ")
-    if guardar == "yes" or "ye" or "y" or "si" or "s" or "sí" :
+    if guardar in ("yes", "ye", "y", "si", "s", "sí") :
         contrasenas = open("contrasenas.txt", "a")
         contrasenas.write(f"""Contraseña generada de complejidad {complejidad}, de entre {minchar} y {maxchar} caracteres:
-{contrasena}
-""")
+        {contrasena}""")
         print("Tu contraseña fue guardada en el archivo de texto 'contrasenas' de la misma carpeta que este script.")
     print("Muchas gracias por utilizar el programa!")
