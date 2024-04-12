@@ -27,7 +27,7 @@ def seleccionar_numchar(frase) :
         print("Por favor ingresá un número")
         return seleccionar_numchar(frase)
 
-def definir_largo():
+def definir_largo(minchar, maxchar):
     largo = minchar + randint(0, maxchar - minchar)
     return largo
 
@@ -46,7 +46,7 @@ def randomizar_mayusculas(frase) :
                     frase_modificada.append(ch)
     return "".join(frase_modificada)
 
-def secuenciar_palabras(con_simbolos, con_mayusc):
+def secuenciar_palabras(minchar, maxchar, con_simbolos, con_mayusc):
     contrasena = ""
     while len(contrasena) < minchar:
         elegir_palabra = True
@@ -62,32 +62,32 @@ def secuenciar_palabras(con_simbolos, con_mayusc):
         contrasena = randomizar_mayusculas(contrasena)
     return contrasena
 
-def secuenciar_caracteres(con_simbolos) :
+def secuenciar_caracteres(minchar, maxchar, con_simbolos) :
     contrasena = ""
     caracteres = string.ascii_letters
     if con_simbolos:
         for ch in caracteres_especiales:
             caracteres += ch
-    while len(contrasena) < definir_largo():
+    while len(contrasena) < definir_largo(minchar, maxchar):
         contrasena += choice(caracteres)
     return contrasena
 
-def generar_contrasena(complejidad):
+def generar_contrasena(complejidad, minchar, maxchar):
     nueva_contrasena = ""
     match complejidad :
         case 1 :
-            nueva_contrasena= secuenciar_palabras(con_simbolos=False, con_mayusc=False)
+            nueva_contrasena= secuenciar_palabras(minchar, maxchar, con_simbolos=False, con_mayusc=False)
         case 2 :
-            nueva_contrasena = secuenciar_palabras(con_simbolos=True, con_mayusc=False)
+            nueva_contrasena = secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=False)
         case 3 :
-            nueva_contrasena = secuenciar_palabras(con_simbolos=True, con_mayusc=True)
+            nueva_contrasena = secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=True)
         case 4 :
-            nueva_contrasena = secuenciar_caracteres(con_simbolos=False)
+            nueva_contrasena = secuenciar_caracteres(minchar, maxchar, con_simbolos=False)
         case 5 :
-            nueva_contrasena = secuenciar_caracteres(con_simbolos=True)
+            nueva_contrasena = secuenciar_caracteres(minchar, maxchar, con_simbolos=True)
     return nueva_contrasena
 
-if __name__ == "__main__" :
+def main():
     print("Bienvenido al generador de contraseñas :3")
     sleep(0.5)
     print("""Hay 5 niveles de complejidad:
@@ -101,7 +101,7 @@ if __name__ == "__main__" :
     complejidad = seleccionar_complejidad()
     minchar = seleccionar_numchar("Por favor seleccioná el número mínimo de caracteres: ")
     maxchar = seleccionar_numchar("Por favor seleccioná el número máximo de caracteres: ")
-    contrasena = generar_contrasena(complejidad)
+    contrasena = generar_contrasena(complejidad, minchar, maxchar)
     sleep(1)
     print(f"Tu contraseña es: {contrasena}")
     sleep(1)
@@ -112,3 +112,6 @@ if __name__ == "__main__" :
         {contrasena}""")
         print("Tu contraseña fue guardada en el archivo de texto 'contrasenas' de la misma carpeta que este script.")
     print("Muchas gracias por utilizar el programa!")
+    
+if __name__ == "__main__" :
+    main()
