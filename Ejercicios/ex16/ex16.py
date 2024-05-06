@@ -12,9 +12,6 @@ class Generador_Contraseñas:
                 self.lista_palabras.append(linea.strip())
         self.caracteres_especiales = ["!", "$", "#", "@", "[", "]", "+", "-", ",", "."] 
         
-    def procesar_palabras(self, lista_palabras):
-        pass
-        
     def seleccionar_numchar(self, msj, min=None, max=None) :
         """Pregunta al usuario con el msj recibido, regresa un número
         entre los valores min y max"""
@@ -22,14 +19,22 @@ class Generador_Contraseñas:
             x = input(msj)
             if x.isnumeric():
                 x = int(x)
-                if min is None and max is None:
-                    return x
-                elif (min is not None and max is not None
-                        and x >= min and x <= max):
-                    return int(x)
-                else:
-                    print("Por favor ingresá un número válido.")
+                num = self.check_minmax(x, min, max)
+                return num if num is not None else print("\
+                    Por favor ingresá un número válido\
+                ") 
 
+    def check_minmax(self, x, min, max):
+        """Función auxiliar para disminuír indentación de
+        'seleccionar_numchar'"""
+        if min is None and max is None:
+            return x
+        elif (min is not None and max is not None
+                and x >= min and x <= max):
+            return x
+        else:
+            return None
+    
     def definir_largo(self, minchar, maxchar):
         return minchar + randint(0, maxchar - minchar)
 
@@ -55,7 +60,8 @@ class Generador_Contraseñas:
 
     def secuenciar_palabras(self, minchar, maxchar, con_simbolos, con_mayusc):
         contraseña = ""
-        while len(contraseña) < minchar:
+        largo = self.definir_largo(minchar, maxchar)
+        while len(contraseña) < largo:
             elegir_palabra = choice([True, False]) if con_simbolos else True
             nuevo_texto = (self.seleccionar_palabra() if elegir_palabra 
                 else choice(self.caracteres_especiales))
@@ -74,18 +80,27 @@ class Generador_Contraseñas:
             contraseña += choice(caracteres)
         return contraseña
 
+    def check_largo_valido(self, minchar, maxchar):
+        if minchar <= maxchar:
+            return True
+        else:
+            return False
+    
     def generar_contraseña(self, complejidad, minchar, maxchar):
-        match complejidad :
-            case 1 :
-                nueva_contraseña= self.secuenciar_palabras(minchar, maxchar, con_simbolos=False, con_mayusc=False)
-            case 2 :
-                return self.secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=False)
-            case 3 :
-                return self.secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=True)
-            case 4 :
-                return self.secuenciar_caracteres(minchar, maxchar, con_simbolos=False)
-            case 5 :
-                return self.secuenciar_caracteres(minchar, maxchar, con_simbolos=True)
+        if self.check_largo_valido(minchar, maxchar):
+            match complejidad :
+                case 1 :
+                    return self.secuenciar_palabras(minchar, maxchar, con_simbolos=False, con_mayusc=False)
+                case 2 :
+                    return self.secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=False)
+                case 3 :
+                    return self.secuenciar_palabras(minchar, maxchar, con_simbolos=True, con_mayusc=True)
+                case 4 :
+                    return self.secuenciar_caracteres(minchar, maxchar, con_simbolos=False)
+                case 5 :
+                    return self.secuenciar_caracteres(minchar, maxchar, con_simbolos=True)
+        else:
+            raise RuntimeError("El número mínimo de caracteres es mayor al máximo!")
 
 def main():
     generador = Generador_Contraseñas()
